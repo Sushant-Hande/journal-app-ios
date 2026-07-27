@@ -1,5 +1,5 @@
-import SwiftUI
 import Playgrounds
+import SwiftUI
 
 @main struct MyApp: App {
     var body: some Scene {
@@ -10,16 +10,31 @@ import Playgrounds
 }
 
 struct ContentView: View {
+
+    @State private var navigationPath: [AppScreen] = []
+
     var body: some View {
-        Text("Hello, world!")
-            .padding()
+
+        NavigationStack(path: $navigationPath) {
+
+            // Default screen
+            LoginView(path: $navigationPath)
+
+                .navigationDestination(for: AppScreen.self) { screen in
+                    switch screen {
+                    case .signUp:
+                        SignUpView(path: $navigationPath)
+                    }
+                }
+        }
+
     }
+}
+
+enum AppScreen: Hashable {
+    case signUp
 }
 
 #Preview {
     ContentView()
-}
-
-#Playground {
-    _ = 1 + 2
 }
