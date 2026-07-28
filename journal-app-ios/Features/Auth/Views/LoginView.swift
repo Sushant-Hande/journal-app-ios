@@ -12,12 +12,21 @@ struct LoginView: View {
     @State private var emailInput: String = ""
     @State private var passwordInput: String = ""
     @State private var isPasswordVisible: Bool = false
+    @State private var isLoginFailed: Bool = false
     
     @Binding var path: [AppScreen]
+    @Environment(AuthViewModel.self) private var viewModel
+    
+    @AppStorage("isLoggedIn") private var isLoggedIn: Bool = false
+    @AppStorage("authToken") private var authToken: String = ""
     
     var body: some View {
+        @Bindable var viewModel = viewModel
+        
         ZStack {
             VStack(alignment: .leading) {
+
+                
                 Text("welcome_label")
                     .font(.largeTitle)
                     .foregroundColor(.primary)
@@ -78,7 +87,19 @@ struct LoginView: View {
                     .frame(height: 20)
                 
                 Button(action: {
-                           print("Login button tapped")
+                           
+                    Task {
+                     let response = await viewModel.login(
+                            email: emailInput,
+                            password: passwordInput
+                        )
+                        if !response.isEmpty {
+                            authToken = response
+                            isLoggedIn = true
+                            path.append(.home)
+                        }
+                    }
+
                        }) {
                            Text("login")
                                .font(.headline)
@@ -118,9 +139,19 @@ struct LoginView: View {
                 }
                 .frame(maxWidth: .infinity)
                 
+                .alert(
+                    "error",
+                    isPresented: $viewModel.hasError,
+                    actions: { Button("Okay") { /* Retry logic */  } },
+                    message: { Text("Error Occurred") }
+                )
+                
             }
             .padding()
+            
+            viewModel.isLoading ? ProgressView() : nil
         }
+        .navigationBarBackButtonHidden(true)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 }
