@@ -22,7 +22,7 @@ struct SplashView: View {
             try? await Task.sleep(nanoseconds: 2_000_000_000) // 2 seconds
             
             if isLoggedIn {
-                path.append(.home)
+                path.append(.dashboard)
             } else {
                 path.append(.login)
             }

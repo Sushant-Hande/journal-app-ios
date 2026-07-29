@@ -34,8 +34,8 @@ struct ContentView: View {
                     case .signUp:
                         SignUpView(path: $navigationPath)
                    
-                    case .home:
-                        HomeView()
+                    case .dashboard:
+                        DashboardView()
                     }
                 }
         }
@@ -46,7 +46,7 @@ struct ContentView: View {
 enum AppScreen: Hashable {
     case login
     case signUp
-    case home
+    case dashboard
 }
 
 #Preview {
