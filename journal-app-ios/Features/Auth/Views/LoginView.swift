@@ -17,6 +17,7 @@ struct LoginView: View {
     
     @AppStorage("isLoggedIn") private var isLoggedIn: Bool = false
     @AppStorage("authToken") private var authToken: String = ""
+    @AppStorage("userName") private var userName: String = ""
     
     var body: some View {
         @Bindable var viewModel = viewModel
@@ -98,6 +99,7 @@ struct LoginView: View {
                         if !response.isEmpty {
                             authToken = response
                             isLoggedIn = true
+                            userName = viewModel.email
                             path.append(.dashboard)
                         }
                     }

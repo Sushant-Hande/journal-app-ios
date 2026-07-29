@@ -11,11 +11,14 @@ struct DashboardView: View {
     
     // State variable to track the currently selected tab
     @State private var selectedTab = 0
+    
+ 
+    let homeViewModel = HomeViewModel(homeRepository: HomeRepositoryImpl(networkServiceProtocol: NetworkManager()))
 
     var body: some View {
 
         TabView {
-            HomeView()
+            HomeView(homeViewModel: homeViewModel)
                 .tabItem {
                     Label("Home", systemImage: "house")
                 }

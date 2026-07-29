@@ -29,8 +29,7 @@ struct JournalEntryView: View {
                     .font(.subheadline)
 
                 Text(
-                    journalEntry.date?.formatted(date: .numeric, time: .omitted)
-                        ?? ""
+                    journalEntry.date.formatted(date: .numeric, time: .omitted)
                 )
                 .font(.subheadline)
                 .padding(.leading, -5)
@@ -48,7 +47,6 @@ struct JournalEntryView: View {
 
 #Preview {
     let journalEntry = JournalEntry(
-        id: UUID(),
         title: "Sample Entry",
         content:
             "This is a sample journal entry. It contains some text to demonstrate how the journal entry will look in the app.",
@@ -57,3 +55,4 @@ struct JournalEntryView: View {
     )
     JournalEntryView(journalEntry: journalEntry)
 }
+

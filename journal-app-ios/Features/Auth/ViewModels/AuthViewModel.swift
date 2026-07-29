@@ -29,8 +29,8 @@ class AuthViewModel {
             showValidationError = true
             return false
         }
-        showValidationError = !email.contains("@") || !(password.count >= 6)
-        return email.contains("@") && password.count >= 6
+        showValidationError =  !(password.count >= 6)
+        return   password.count >= 6
     }
 
     func signUp(email: String, password: String) async -> Bool {
