@@ -16,6 +16,17 @@ protocol NetworkServiceProtocol {
 final class NetworkManager: NetworkServiceProtocol {
     private let session: URLSession
     let networkLogger = Logger(subsystem: "dev.sushanthande.journalapp", category: "Networking")
+
+    let customDateFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        // "y" = Year, "M" = Month, "d" = Day
+        // "H" = Hour (24-hour), "m" = Minute, "s" = Second, "SSS" = Fractional seconds
+        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SS"
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        formatter.timeZone = TimeZone(secondsFromGMT: 0) // Adjust if your server uses a specific timezone
+        return formatter
+    }()
+
     
     // Injecting URLSession allows you to inject a mock session for unit tests later
     init(session: URLSession = .shared) {
@@ -45,6 +56,7 @@ final class NetworkManager: NetworkServiceProtocol {
         // 4. Decode server data into your desired swift Decodable type
         do {
             let decoder = JSONDecoder()
+            decoder.dateDecodingStrategy = .formatted(customDateFormatter)
             
             // Response decoding logic for String type, which is not a JSON object but a raw string
             if T.self == String.self {
