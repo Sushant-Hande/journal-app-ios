@@ -9,8 +9,6 @@ import SwiftUI
 
 struct SignUpView: View {
 
-    @State private var emailInput: String = ""
-    @State private var passwordInput: String = ""
     @State private var isPasswordVisible: Bool = false
     @State private var isSignUpSuccessful: Bool = false
 
@@ -18,9 +16,9 @@ struct SignUpView: View {
     @Environment(AuthViewModel.self) private var viewModel
 
     var body: some View {
-        
+
         @Bindable var viewModel = viewModel
-        
+
         ZStack {
             VStack(alignment: .leading) {
                 Text("create_account")
@@ -36,7 +34,7 @@ struct SignUpView: View {
                 Spacer()
                     .frame(height: 20)
 
-                TextField("email", text: $emailInput)
+                TextField("email", text: $viewModel.email)
                     .keyboardType(.emailAddress)
                     .textContentType(.emailAddress)
                     .autocorrectionDisabled(true)
@@ -55,12 +53,12 @@ struct SignUpView: View {
                 HStack {
                     // Conditional swap based on visibility state
                     if isPasswordVisible {
-                        TextField("password", text: $passwordInput)
+                        TextField("password", text: $viewModel.password)
                             .textContentType(.password)
                             .autocorrectionDisabled(true)
                             .textInputAutocapitalization(.never)
                     } else {
-                        SecureField("password", text: $passwordInput)
+                        SecureField("password", text: $viewModel.password)
                             .textContentType(.password)
                     }
 
@@ -86,10 +84,14 @@ struct SignUpView: View {
 
                 Button(action: {
 
+                    if !viewModel.validateInput() {
+                        return
+                    }
+
                     Task {
-                     let response = await viewModel.signUp(
-                            email: emailInput,
-                            password: passwordInput
+                        let response = await viewModel.signUp(
+                            email: viewModel.email,
+                            password: viewModel.password
                         )
                         isSignUpSuccessful = response
                     }
@@ -135,15 +137,31 @@ struct SignUpView: View {
 
                 .alert(
                     "error",
+                    isPresented: $viewModel.showValidationError,
+                    actions: { Button("Okay") { /* Retry logic */  } },
+                    message: {
+                        Text(
+                            viewModel.error ?? "Enter valid email and password"
+                        )
+                    }
+                )
+
+                .alert(
+                    "error",
                     isPresented: $viewModel.hasError,
                     actions: { Button("Okay") { /* Retry logic */  } },
                     message: { Text(viewModel.error ?? "Error Occurred") }
                 )
-                
+
                 .alert(
                     "success",
                     isPresented: $isSignUpSuccessful,
-                    actions: { Button("Okay") { path.removeLast()  } },
+                    actions: {
+                        Button("Okay") {
+                            viewModel.clear()
+                            path.removeLast()
+                        }
+                    },
                     message: { Text("account_created_successfully") }
                 )
 
@@ -152,11 +170,14 @@ struct SignUpView: View {
 
             viewModel.isLoading ? ProgressView() : nil
         }
+        .toolbar(.hidden, for: .navigationBar)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
 
     }
 }
 
 #Preview {
+    let authViewModel = AuthViewModel(authRepository: MockAuthRepository())
     SignUpView(path: .constant([]))
+        .environment(authViewModel)
 }

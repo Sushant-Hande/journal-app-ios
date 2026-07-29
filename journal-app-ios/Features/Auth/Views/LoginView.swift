@@ -9,8 +9,6 @@ import SwiftUI
 
 struct LoginView: View {
     
-    @State private var emailInput: String = ""
-    @State private var passwordInput: String = ""
     @State private var isPasswordVisible: Bool = false
     @State private var isLoginFailed: Bool = false
     
@@ -40,7 +38,7 @@ struct LoginView: View {
                 Spacer()
                     .frame(height: 20)
                 
-                TextField("email", text: $emailInput)
+                TextField("email", text: $viewModel.email)
                                 .keyboardType(.emailAddress)
                                 .textContentType(.emailAddress)
                                 .autocorrectionDisabled(true)
@@ -59,12 +57,12 @@ struct LoginView: View {
                 HStack {
                     // Conditional swap based on visibility state
                     if isPasswordVisible {
-                        TextField("password", text: $passwordInput)
+                        TextField("password", text: $viewModel.password)
                             .textContentType(.password)
                             .autocorrectionDisabled(true)
                             .textInputAutocapitalization(.never)
                     } else {
-                        SecureField("password", text: $passwordInput)
+                        SecureField("password", text: $viewModel.password)
                             .textContentType(.password)
                     }
                     
@@ -87,16 +85,20 @@ struct LoginView: View {
                     .frame(height: 20)
                 
                 Button(action: {
-                           
+                    
+                    if !viewModel.validateInput() {
+                        return
+                    }
+                    
                     Task {
                      let response = await viewModel.login(
-                            email: emailInput,
-                            password: passwordInput
+                            email: viewModel.email,
+                            password: viewModel.password
                         )
                         if !response.isEmpty {
                             authToken = response
                             isLoggedIn = true
-                            path.append(.home)
+                            path.append(.dashboard)
                         }
                     }
 
@@ -134,10 +136,22 @@ struct LoginView: View {
                     Text("create_an_account")
                         .foregroundColor(.blue)
                         .onTapGesture {
+                            viewModel.clear()
                             path.append(.signUp)
                         }
                 }
                 .frame(maxWidth: .infinity)
+                
+                .alert(
+                    "error",
+                    isPresented: $viewModel.showValidationError,
+                    actions: { Button("Okay") { /* Retry logic */  } },
+                    message: {
+                        Text(
+                            viewModel.error ?? "Enter valid email and password"
+                        )
+                    }
+                )
                 
                 .alert(
                     "error",
@@ -157,5 +171,7 @@ struct LoginView: View {
 }
 
 #Preview {
+    let authViewModel = AuthViewModel(authRepository: MockAuthRepository())
     LoginView(path: .constant([]))
+        .environment(authViewModel)
 }
