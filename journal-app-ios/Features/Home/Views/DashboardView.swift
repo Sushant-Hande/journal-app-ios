@@ -9,9 +9,10 @@ import SwiftUI
 
 struct DashboardView: View {
     
+    @Binding var path: [AppScreen]
+    
     // State variable to track the currently selected tab
     @State private var selectedTab = 0
-    
  
     @State var homeViewModel = HomeViewModel(homeRepository: HomeRepositoryImpl(networkServiceProtocol: NetworkManager()))
 
@@ -36,7 +37,7 @@ struct DashboardView: View {
         .toolbar {
             ToolbarItem(placement: .secondaryAction) {
                 Button("Profle") {
-                    
+                    path.append(.profile)
                 }
             }
         }
@@ -44,5 +45,5 @@ struct DashboardView: View {
 }
 
 #Preview {
-    DashboardView()
+    DashboardView(path: .constant([]))
 }
