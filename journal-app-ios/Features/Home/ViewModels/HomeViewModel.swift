@@ -13,6 +13,7 @@ class HomeViewModel {
     var error: String?
     var hasError = false
     var journalEntries: [JournalEntry] = []
+    var hasLoaded = false
 
     private let homeRepository: HomeRepository
     
@@ -20,11 +21,13 @@ class HomeViewModel {
         self.homeRepository = homeRepository
     }
     
-    func fetchJournalEntries(userName: String, authToken: String) async {
+    func fetchJournalEntriesIfNeeded(userName: String, authToken: String) async {
+        guard !hasLoaded else { return }
         isLoading = true
         do {
             journalEntries = try await homeRepository.fetchJournalEntries(userName: userName, authToken: authToken)
             journalEntries.sort { $0.date > $1.date }
+            hasLoaded = true
             isLoading = false
         } catch {
             self.error = error.localizedDescription

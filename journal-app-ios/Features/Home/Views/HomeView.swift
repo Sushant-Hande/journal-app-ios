@@ -19,45 +19,45 @@ struct HomeView: View {
     }
 
     var body: some View {
-        ZStack(alignment: .bottomTrailing) {
-            VStack {
-                List {
-                    ForEach(homeViewModel.journalEntries) { journalEntry in
-                        JournalEntryView(journalEntry: journalEntry)
-                    }.onDelete { _ in
-
+        ZStack(alignment: .center) {
+            ZStack(alignment: .bottomTrailing) {
+                VStack {
+                    List {
+                        ForEach(homeViewModel.journalEntries) { journalEntry in
+                            JournalEntryView(journalEntry: journalEntry)
+                        }.onDelete { _ in
+                            
+                        }
+                    }.task {
+                        await homeViewModel.fetchJournalEntriesIfNeeded(
+                            userName: userName,
+                            authToken: authToken
+                        )
                     }
                 }
-            }
-
-            Button(
-                action: {
-
-                },
-                label: {
-                    Circle()
-                        .fill(.white)
-                        .frame(width: 60, height: 60)
-                        .shadow(radius: 10)
-                        .overlay(
-                            Image(systemName: "plus").font(.title2)
-                                .foregroundColor(.blue).bold()
-                        )
-                }
-            )
-            .padding()
-
-            homeViewModel.isLoading ? ProgressView() : nil
-
-        }.onAppear {
-            Task {
-                await homeViewModel.fetchJournalEntries(
-                    userName: userName,
-                    authToken: authToken
+                
+                Button(
+                    action: {
+                        
+                    },
+                    label: {
+                        Circle()
+                            .fill(.white)
+                            .frame(width: 60, height: 60)
+                            .shadow(radius: 10)
+                            .overlay(
+                                Image(systemName: "plus").font(.title2)
+                                    .foregroundColor(.blue).bold()
+                            )
+                    }
                 )
+                .padding()
+                
             }
+            .navigationBarBackButtonHidden(true)
+            
+            homeViewModel.isLoading ? ProgressView() : nil
         }
-        .navigationBarBackButtonHidden(true)
     }
 }
 

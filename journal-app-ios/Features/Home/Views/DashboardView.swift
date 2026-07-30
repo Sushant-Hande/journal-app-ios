@@ -13,11 +13,11 @@ struct DashboardView: View {
     @State private var selectedTab = 0
     
  
-    let homeViewModel = HomeViewModel(homeRepository: HomeRepositoryImpl(networkServiceProtocol: NetworkManager()))
+    @State var homeViewModel = HomeViewModel(homeRepository: HomeRepositoryImpl(networkServiceProtocol: NetworkManager()))
 
     var body: some View {
 
-        TabView {
+        TabView(selection: $selectedTab) {
             HomeView(homeViewModel: homeViewModel)
                 .tabItem {
                     Label("Home", systemImage: "house")
