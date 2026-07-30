@@ -35,7 +35,10 @@ struct ContentView: View {
                         SignUpView(path: $navigationPath)
                    
                     case .dashboard:
-                        DashboardView()
+                        DashboardView(path: $navigationPath)
+                        
+                    case .profile:
+                        ProfileView()
                     }
                 }
         }
@@ -47,6 +50,7 @@ enum AppScreen: Hashable {
     case login
     case signUp
     case dashboard
+    case profile
 }
 
 #Preview {
