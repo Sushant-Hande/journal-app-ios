@@ -51,17 +51,19 @@ The project follows MVVM with a repository pattern:
 - **Mocks:** `MockAuthRepository`, `MockHomeRepositoryImpl`, `MockAddJournalRepository` (for previews and tests)
 
 ## Key Workflows
-### Authentication
-User inputs are validated in the login form. Tapping the login button triggers an asynchronous task calling `AuthViewModel.login`. On success, `AppStorage` values like `isLoggedIn` and `authToken` are set, and the app navigates to `.dashboard`.
+| Login | Sign up |
+| --- | --- |
+| <img src="assets/login.png" width="300" alt="Login screen" /> | <img src="assets/sign-up.png" width="300" alt="Sign up screen" /> |
 
-### Home & Journals
-`HomeView` loads journal entries using `HomeViewModel.fetchJournalEntriesIfNeeded(userName:authToken:)` inside a `.task` modifier. A floating add button navigates the user to `AddJournalView`.
+| Home | Add journal |
+| --- | --- |
+| <img src="assets/home.png" width="300" alt="Home screen" /> | <img src="assets/add-journal.png" width="300" alt="Add journal screen" /> |
 
-### Add Journal
-`AddJournalView` validates the title and content inputs, then calls `AddJournalViewModel.addJournal(userName:authToken:)`. On success, the new journal entry is inserted at index 0 of `HomeViewModel.journalEntries`, and a success alert is shown.
+| Profile |  |
+| --- | --- |
+| <img src="assets/profile.png" width="300" alt="Profile screen" /> |  |
 
-## Localization
-User-facing strings use string keys (e.g., `"welcome_label"`, `"settle_into"`, `"email"`), implying support for `Localizable.strings`. It is recommended to add or enhance these translation files for improved localization.
+
 
 ## Testing
 - SwiftUI previews are provided for major views with mock repositories.  
