@@ -6,8 +6,13 @@
 	objectVersion = 90;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		1212BD97301DDB7000803317 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 1212BD96301DDB7000803317 /* README.md */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		000000000000000000000120 /* journal-app-ios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "journal-app-ios.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		1212BD96301DDB7000803317 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -45,6 +50,7 @@
 			children = (
 				000000000000000000000010 /* journal-app-ios */,
 				000000000000000000000020 /* Products */,
+				1212BD96301DDB7000803317 /* README.md */,
 			);
 			sourceTree = "<group>";
 		};
@@ -115,6 +121,7 @@
 		000000000000000140000000 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			files = (
+				1212BD97301DDB7000803317 /* README.md in Resources */,
 			);
 		};
 /* End PBXResourcesBuildPhase section */
