@@ -19,10 +19,4 @@ class HomeRepositoryImpl: HomeRepository {
         return try await networkServiceProtocol.request(JournalEndPoint.getJournals(userName: userName, authToken: authToken))
     }
     
-    func addJournalEntry(journalEntry: JournalEntry) async throws {
-        throw NSError(domain: "Not implemented", code: 0, userInfo: nil)
-    }
-    
-    
-    
 }
