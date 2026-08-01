@@ -29,7 +29,18 @@ extension Endpoint {
         
         var request = URLRequest(url: url)
         request.httpMethod = method.rawValue
-        request.allHTTPHeaderFields = headers
+        
+        // Start with defaults
+        var finalHeaders: [String: String] = ["Content-Type": "application/json"]
+
+        // Merge in endpoint-specific headers (overrides defaults if same keys)
+        if let endpointHeaders = headers {
+            for (k, v) in endpointHeaders {
+                finalHeaders[k] = v
+            }
+        }
+        
+        request.allHTTPHeaderFields = finalHeaders
         request.httpBody = body
         return request
     }

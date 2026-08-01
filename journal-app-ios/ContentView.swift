@@ -1,4 +1,3 @@
-import Playgrounds
 import SwiftUI
 
 @main struct MyApp: App {
@@ -15,6 +14,12 @@ struct ContentView: View {
 
     @State private var authViewModel: AuthViewModel = AuthViewModel(
         authRepository: AuthRepositoryImpl(
+            networkServiceProtocol: NetworkManager()
+        )
+    )
+    
+    @State private var homeViewModel = HomeViewModel(
+        homeRepository: HomeRepositoryImpl(
             networkServiceProtocol: NetworkManager()
         )
     )
@@ -39,10 +44,14 @@ struct ContentView: View {
                         
                     case .profile:
                         ProfileView()
+                   
+                    case .addJournal:
+                        AddJournalView(path: $navigationPath)
                     }
                 }
         }
         .environment(authViewModel)
+        .environment(homeViewModel)
     }
 }
 
@@ -51,6 +60,7 @@ enum AppScreen: Hashable {
     case signUp
     case dashboard
     case profile
+    case addJournal
 }
 
 #Preview {

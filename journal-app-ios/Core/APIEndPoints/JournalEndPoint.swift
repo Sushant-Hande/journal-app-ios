@@ -9,12 +9,12 @@ import Foundation
 
 enum JournalEndPoint: Endpoint {
     case getJournals(userName: String, authToken: String)
-    case addJournal(title: String, content: String, authToken: String)
+    case addJournal(title: String, content: String, userName: String, authToken: String)
     
     var path: String {
         switch self {
-        case .getJournals(let userName, let authToken): return "/journal/getJournalEntries/\(userName)"
-        case .addJournal: return "/journal/addJournalEntry"
+        case .getJournals(let userName, _): return "/journal/getJournalEntries/\(userName)"
+        case .addJournal(_, _, let userName, _): return "/journal/addJournalEntry/\(userName)"
         }
     }
     
@@ -27,17 +27,17 @@ enum JournalEndPoint: Endpoint {
     
     var headers: [String: String]? {
         switch self {
-        case .getJournals(_, let authToken), .addJournal(_, _, let authToken):
+        case .getJournals(_, let authToken), .addJournal(_, _, _, let authToken):
             return ["Authorization": "Bearer \(authToken)"]
         }
     }
     
     var body: Data? {
         switch self {
-        case .getJournals(let userName, let authToken):
+        case .getJournals(_, _):
             return nil
             
-        case .addJournal(let title, let content, let authToken):
+        case .addJournal(let title, let content, _, _):
             return try? JSONEncoder().encode(["title": title, "content": content])
         }
     }

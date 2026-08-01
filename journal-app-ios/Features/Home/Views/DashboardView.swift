@@ -8,22 +8,23 @@
 import SwiftUI
 
 struct DashboardView: View {
-    
+
     @Binding var path: [AppScreen]
+    @Environment(HomeViewModel.self) private var homeViewModel
     
     // State variable to track the currently selected tab
     @State private var selectedTab = 0
- 
-    @State var homeViewModel = HomeViewModel(homeRepository: HomeRepositoryImpl(networkServiceProtocol: NetworkManager()))
 
     var body: some View {
 
         TabView(selection: $selectedTab) {
-            HomeView(homeViewModel: homeViewModel)
-                .tabItem {
-                    Label("Home", systemImage: "house")
-                }
-                .tag(0)
+            HomeView(homeViewModel: homeViewModel) {
+                path.append(.addJournal)
+            }
+            .tabItem {
+                Label("Home", systemImage: "house")
+            }
+            .tag(0)
 
             FavoritesView()
                 .tabItem {
@@ -41,9 +42,11 @@ struct DashboardView: View {
                 }
             }
         }
+        .environment(homeViewModel)
     }
 }
 
 #Preview {
     DashboardView(path: .constant([]))
+        .environment(HomeViewModel(homeRepository:MockHomeRepositoryImpl()))
 }

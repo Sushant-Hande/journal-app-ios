@@ -27,7 +27,6 @@ struct ProfileView: View {
                         .frame(width: 20, height: 20)
                     VStack(alignment: .leading) {
                         Text("user_name")
-                            .font(.headline)
 
                         Text(userName)
                             .font(.subheadline)
@@ -47,7 +46,6 @@ struct ProfileView: View {
                         .frame(width: 20, height: 20)
                     VStack(alignment: .leading) {
                         Text("logged_in")
-                            .font(.headline)
 
                         Text("yes")
                             .font(.subheadline)
@@ -67,7 +65,6 @@ struct ProfileView: View {
                         .frame(width: 20, height: 20)
                     VStack(alignment: .leading) {
                         Text("auth_token")
-                            .font(.headline)
 
                         Text("available")
                             .font(.subheadline)

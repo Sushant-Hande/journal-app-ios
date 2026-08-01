@@ -13,9 +13,11 @@ struct HomeView: View {
     @AppStorage("userName") private var userName: String = ""
 
     private let homeViewModel: HomeViewModel
+    let onAddJournal: () -> Void
 
-    init(homeViewModel: HomeViewModel) {
+    init(homeViewModel: HomeViewModel, onAddJournal: @escaping () -> Void) {
         self.homeViewModel = homeViewModel
+        self.onAddJournal = onAddJournal
     }
 
     var body: some View {
@@ -38,7 +40,7 @@ struct HomeView: View {
                 
                 Button(
                     action: {
-                        
+                        onAddJournal()
                     },
                     label: {
                         Circle()
@@ -63,5 +65,5 @@ struct HomeView: View {
 
 #Preview {
     let homeViewModel = HomeViewModel(homeRepository: MockHomeRepositoryImpl())
-    HomeView(homeViewModel: homeViewModel)
+    HomeView(homeViewModel: homeViewModel, onAddJournal: {})
 }

@@ -9,5 +9,4 @@ import Foundation
 
 protocol HomeRepository {
     func fetchJournalEntries(userName: String, authToken: String) async throws -> [JournalEntry]
-    func addJournalEntry(journalEntry: JournalEntry) async throws
 }
